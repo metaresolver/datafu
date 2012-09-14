@@ -155,6 +155,12 @@ public class Quantile extends SimpleEvalFunc<Tuple>
       i++;
     }
 
+    if (d.containsValue(null)) {
+      // Getting hackish to handle reliably, better to just filter nulls in Pig
+      warn("Output NULL because NULL input", PigWarning.UDF_WARNING_2);
+      return null;
+    }
+
     Tuple t = TupleFactory.getInstance().newTuple(this.quantiles.size());
     int j = 0;
     for (double k : this.quantiles) {
